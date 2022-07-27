@@ -12,6 +12,8 @@ align-items: center;
 `
 
 const Button = styled.button`
+width: 200px;
+margin-left: 20px;
   font-size: 24px;
   padding: 14px 22px;
   background-color: lightgray;
@@ -23,6 +25,9 @@ export default function Home() {
     <Container>
       <Link href='/login'>
         <Button>Login</Button>
+      </Link>
+      <Link href='/register'>
+        <Button>Register</Button>
       </Link>
     </Container>
   )

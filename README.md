@@ -1,34 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a Binar-Frontend-Mock-Test project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+First, install the package manager:
 
-```bash
-npm run dev
-# or
+yarn
+
+After finished, run dev
+
 yarn dev
-```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Usage
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+As mentioned in the assessment test, i made 6 services:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+a. Create User
+b. Login
+c. Show Product
+d. Create Product
+e. Update Product
+f. Delete Product
 
-## Learn More
+Create user: click Register in landing page.
+Login: click Login in landing page.
+Show Product: Right after login, user redirected to dashboard and now can see products available.
+Create Product: Click "Create New" button on Navbar, and simply add new product you want to list.
 
-To learn more about Next.js, take a look at the following resources:
+## Usage Issues:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+I found some issues in E & F point, both had the same issues which is related to CORS Error.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- What've i tried:
+  Adding proxy with heroku: didn't work
+  Adding headers (as you can see in the product.js): didn't work
+  Using both cookies & localStorage to save the access_token: didn't work
 
-## Deploy on Vercel
+- Temporary solutions:
+  Disabling chrome security using
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Windows : Windows + R --> chrome --disable-web-security --user-data-dir
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+MacOS : open -na Google\ Chrome --args --user-data-dir=/tmp/temporary-chrome-profile-dir --disable-web-security --disable-site-isolation-trials
+
+Adding and using chrome extension : https://chrome.google.com/webstore/detail/moesif-orign-cors-changer/digfbfaphojjndkpccljibejjbppifbc/related?hl=en-GB
