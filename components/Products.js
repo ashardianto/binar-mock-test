@@ -2,9 +2,10 @@ import { parse } from "cookie";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BsFillTrashFill } from "react-icons/bs";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaWatchmanMonitoring } from "react-icons/fa";
 import Modal from "react-modal";
 import axios from "axios";
+import Router, { useRouter } from "next/router";
 
 const Container = styled.div`
   width: 80%;
@@ -124,6 +125,8 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const waiting = async (t) => new Promise((r) => setTimeout(r, t));
+
 const Products = () => {
   const [openEditProduct, setOpenEditProduct] = useState(false);
   const [openDeleteProduct, setOpenDeleteProduct] = useState(false);
@@ -132,8 +135,12 @@ const Products = () => {
   const [productPrice, setProductPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loading, setLoading] = useState("Edit");
+  const [deleteLoading, setDeleteLoading] = useState("Yes, delete it");
 
   const [products, setProducts] = useState(null);
+
+  const router = useRouter();
 
   const openModal = () => {
     setOpenEditProduct(true);
@@ -145,7 +152,7 @@ const Products = () => {
 
   const getProducts = async () => {
     const productData = await fetch(
-      "https://test-binar.herokuapp.com/v1/products",
+      "https://private-anon-07aad3e4ee-testbinar.apiary-proxy.com/v1/products",
       {
         method: "GET",
         headers: {
@@ -192,21 +199,28 @@ const Products = () => {
 
     axios({
       method: "PUT",
-      url: `https://test-binar.herokuapp.com/v1/products/${selectedProduct.id}`,
+      url: `https://private-anon-07aad3e4ee-testbinar.apiary-proxy.com/v1/products/${selectedProduct.id}`,
       headers: {
-        Accept: "*/*",
         Authorization: parse(document.cookie)["token"],
-        "Content-Type": "application/json",
+        // Accept: "*/*",
+        // "Content-Type": "application/json",
         // Authorization: window.localStorage.getItem("token"),
+        // "Access-Control-Allow-Headers":
+        //   "Origin, X-Requested-With, Content-Type, Accept",
         // "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Methods": "PUT",
+        // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
-      body: { name: productName },
+      data: { name: productName, price: productPrice, imageurl: imageUrl },
     })
       .then(async (res) => {
         const response = res.data;
+        setLoading("Processing...");
+        await waiting(3000);
         if (!response.errors) {
-          console.log(response);
+          setLoading("Updated");
+          await waiting(2000);
+          router.reload(window.location.pathname);
+          closeModal();
         } else {
           console.log(response);
         }
@@ -221,18 +235,24 @@ const Products = () => {
 
     axios({
       method: "DELETE",
-      url: `https://test-binar.herokuapp.com/v1/products/${selectedProduct.id}`,
+      url: `https://private-anon-07aad3e4ee-testbinar.apiary-proxy.com/v1/products/${selectedProduct.id}`,
       headers: {
         Authorization: parse(document.cookie)["token"],
         // Authorization: window.localStorage.getItem("token"),
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "DELETE",
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Methods": "DELETE",
       },
     })
       .then(async (res) => {
         const response = res.data;
+        setDeleteLoading("Processing...");
+        await waiting(3000);
         if (!response.errors) {
           console.log(response);
+          setDeleteLoading("Deleted!");
+          await waiting(2000);
+          router.reload(window.location.pathname);
+          closeModal();
         } else {
           console.log(response);
         }
@@ -289,7 +309,7 @@ const Products = () => {
                                   No
                                 </Button>
                                 <Button onClick={handleDeleteProduct}>
-                                  Yes, delete it
+                                  {deleteLoading}
                                 </Button>
                               </ModalButtonContainer>
                             </ModalForm>
@@ -336,7 +356,7 @@ const Products = () => {
               />
               <ModalButtonContainer>
                 <Button onClick={() => closeModal(false)}>Back</Button>
-                <Button onClick={handleEditProduct}>Edit</Button>
+                <Button onClick={handleEditProduct}>{loading}</Button>
               </ModalButtonContainer>
             </ModalForm>
           </ModalWrapper>

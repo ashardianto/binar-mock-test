@@ -103,12 +103,15 @@ display: flex;
 justify-content: flex-end;
 `
 
+const waiting = async (t) => new Promise((r) => setTimeout(r, t));
+
 const Navbar = () => {
 
   const [openNewProduct, setOpenNewProduct] = useState(false)
   const [productName, setProductName] = useState('')
   const [productPrice, setProductPrice] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [loading, setLoading] = useState("Create");
 
   const router = useRouter()
 
@@ -130,21 +133,25 @@ const Navbar = () => {
 
     const data = { name: productName, price: productPrice, imageurl: imageUrl }
 
-    fetch('https://test-binar.herokuapp.com/v1/products/', {
+    fetch('https://private-anon-07aad3e4ee-testbinar.apiary-proxy.com/v1/products/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': window.localStorage.getItem('token'),
-        // 'Authorization': parse(document.cookie)['token'],
+        // 'Authorization': window.localStorage.getItem('token'),
+        'Authorization': parse(document.cookie)['token'],
       },
       body: JSON.stringify(data)
     })
       .then(async (res) => {
         // console.log(await res.json())
         const response = await res.json()
+        setLoading("Processing...");
+        await waiting(3000);
         if (!response.errors) {
-          console.log(response)
-          closeModal()
+          setLoading("Created!");
+          await waiting(2000);
+          router.reload(window.location.pathname);
+          closeModal();
         } else {
           console.log(response)
         }
@@ -174,7 +181,7 @@ const Navbar = () => {
                   <ModalInput type='text' placeholder="Image url" onChange={(e) => setImageUrl(e.target.value)} />
                   <ModalButtonContainer>
                     <Button onClick={() => closeModal(false)}>Back</Button>
-                    <Button onClick={handleClickModal}>Create</Button>
+                    <Button onClick={handleClickModal}>{loading}</Button>
                   </ModalButtonContainer>
                 </ModalForm>
               </ModalWrapper>
