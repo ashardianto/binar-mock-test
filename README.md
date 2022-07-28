@@ -27,21 +27,5 @@ Create user: click Register in landing page.
 Login: click Login in landing page.
 Show Product: Right after login, user redirected to dashboard and now can see products available.
 Create Product: Click "Create New" button on Navbar, and simply add new product you want to list.
-
-## Usage Issues:
-
-I found some issues in E & F point, both had the same issues which is related to CORS Error.
-
-- What've i tried:
-  Adding proxy with heroku: didn't work
-  Adding headers (as you can see in the product.js): didn't work
-  Using both cookies & localStorage to save the access_token: didn't work
-
-- Temporary solutions:
-  Disabling chrome security using
-
-Windows : Windows + R --> chrome --disable-web-security --user-data-dir
-
-MacOS : open -na Google\ Chrome --args --user-data-dir=/tmp/temporary-chrome-profile-dir --disable-web-security --disable-site-isolation-trials
-
-Adding and using chrome extension : https://chrome.google.com/webstore/detail/moesif-orign-cors-changer/digfbfaphojjndkpccljibejjbppifbc/related?hl=en-GB
+Update Product: Click "edit logo" icon on images, and simply put update you want.
+Delete Product: Click "trash logo" icon on images, and click Yes, delete it button if you want to delete the product.
